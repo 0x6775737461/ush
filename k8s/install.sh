@@ -54,6 +54,14 @@ inst_local() {
 
 	chmod ug+x kubectl
 	mv kubectl ~/.local/bin/kubectl/bin/
+
+	add_path
+}
+
+# add binary command to path
+add_path() {
+	echo 'export PATH="${PATH}:/${HOME}/.local/bin/kubectl/bin"' \
+	>> ~/.bashrc && source ~/.bashrc
 }
 
 main() {
