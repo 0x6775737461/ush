@@ -14,19 +14,35 @@ get_bin() {
 		read -r opt
 
 		if [ "$opt" = 'y' ]; then
-			# kubectl version 
+			# kubectl version
 			local kctl_v 
 			kctl_v=$(curl -L -sS https://dl.k8s.io/release/stable.txt)
 
-			curl -LO \
-			"https://dl.k8s.io/release/${kctl_v}/bin/linux/amd64/kubectl" && \
-				echo "File downloaded!!" 
+			if [ ! -e 'kubectl' ]; then
+				curl -LO \
+				"https://dl.k8s.io/release/${kctl_v}/bin/linux/amd64/kubectl"
+			fi
+
+			checksum "$kctl_v"
 		fi
 
 	else
 		echo "Are you connected to the internet?"
-
 	fi
+}
+
+checksum() {
+	if [ ! -e 'kubectl.sha256' ]; then
+		curl -LO -sS \
+		"httpS://dl.k8s.io/${1}/bin/linux/amd64/kubectl.sha256"
+	fi
+
+	# inserting target file
+	sed  -E "s/^[[:xdigit:]]{64}$/\0 *kubectl/" kubectl.sha256 -i
+
+	# doing checksum
+	sha256sum --quiet -c kubectl.sha256 && \
+		echo "Valid file!"
 }
 
 main() {
