@@ -42,7 +42,18 @@ checksum() {
 
 	# doing checksum
 	sha256sum --quiet -c kubectl.sha256 && \
-		echo "Valid file!"
+		echo "Valid file!" && inst_local
+}
+
+inst_local() {
+	echo 'Installing on ~/.local/bin/kubectl'
+
+	mkdir -p ~/.local/bin/kubectl/bin
+
+	mv kubectl.sha256 ~/.local/bin/kubectl/
+
+	chmod ug+x kubectl
+	mv kubectl ~/.local/bin/kubectl/bin/
 }
 
 main() {
