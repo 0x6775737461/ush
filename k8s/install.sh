@@ -61,7 +61,8 @@ inst_local() {
 # add binary command to path
 add_path() {
 	echo 'export PATH="${PATH}:/${HOME}/.local/bin/kubectl/bin"' \
-	>> ~/.bashrc && source ~/.bashrc
+	>> ~/.bashrc
+	source ~/.bashrc
 }
 
 main() {
